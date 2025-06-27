@@ -12,6 +12,15 @@ Please see instructions for https://github.com/haotian-liu/LLaVA/
 ## LLaVA-SP Weights
 Please check out https://huggingface.co/Levideus/models for all public LLaVA-SP checkpoints.
 
+## Quick Start  
+```
+python llava/eval/run_llava.py
+--model_path /path/llava-sp-cropping-lora
+--model_base /path/vicuna-1.5-7b
+```
+
+    parser.add_argument("--model-path", type=str, default="facebook/opt-350m")
+    parser.add_argument("--model-base", type=str, default=None)
 
 ## Citation
 
