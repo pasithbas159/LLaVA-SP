@@ -67,10 +67,11 @@ def get_modality_length_grouped_indices(lengths, batch_size, world_size, generat
     lang_indices, lang_lengths = zip(*[(i, -l) for i, l in enumerate(lengths) if l < 0])
 
     mm_shuffle = [mm_indices[i] for i in get_length_grouped_indices(mm_lengths, batch_size, world_size, generator=None)]
-    lang_shuffle = [lang_indices[i] for i in get_length_grouped_indices(lang_lengths, batch_size, world_size, generator=None)]
+    lang_shuffle = [lang_indices[i] for i in
+                    get_length_grouped_indices(lang_lengths, batch_size, world_size, generator=None)]
     megabatch_size = world_size * batch_size
-    mm_megabatches = [mm_shuffle[i : i + megabatch_size] for i in range(0, len(mm_shuffle), megabatch_size)]
-    lang_megabatches = [lang_shuffle[i : i + megabatch_size] for i in range(0, len(lang_shuffle), megabatch_size)]
+    mm_megabatches = [mm_shuffle[i: i + megabatch_size] for i in range(0, len(mm_shuffle), megabatch_size)]
+    lang_megabatches = [lang_shuffle[i: i + megabatch_size] for i in range(0, len(lang_shuffle), megabatch_size)]
 
     last_mm = mm_megabatches[-1]
     last_lang = lang_megabatches[-1]
@@ -89,7 +90,7 @@ def get_length_grouped_indices(lengths, batch_size, world_size, generator=None, 
     # We need to use torch for the random part as a distributed sampler will set the random seed for torch.
     indices = torch.randperm(len(lengths), generator=generator)
     megabatch_size = world_size * batch_size
-    megabatches = [indices[i : i + megabatch_size].tolist() for i in range(0, len(lengths), megabatch_size)]
+    megabatches = [indices[i: i + megabatch_size].tolist() for i in range(0, len(lengths), megabatch_size)]
     megabatches = [sorted(megabatch, key=lambda i: lengths[i], reverse=True) for megabatch in megabatches]
     megabatches = [split_to_even_chunks(megabatch, lengths, world_size) for megabatch in megabatches]
 
@@ -124,9 +125,11 @@ class LengthGroupedSampler(Sampler):
 
     def __iter__(self):
         if self.group_by_modality:
-            indices = get_modality_length_grouped_indices(self.lengths, self.batch_size, self.world_size, generator=self.generator)
+            indices = get_modality_length_grouped_indices(self.lengths, self.batch_size, self.world_size,
+                                                          generator=self.generator)
         else:
-            indices = get_length_grouped_indices(self.lengths, self.batch_size, self.world_size, generator=self.generator)
+            indices = get_length_grouped_indices(self.lengths, self.batch_size, self.world_size,
+                                                 generator=self.generator)
         return iter(indices)
 
 
@@ -164,33 +167,155 @@ class LLaVATrainer(Trainer):
             decay_parameters = [name for name in decay_parameters if "bias" not in name]
             if self.args.mm_projector_lr is not None:
                 projector_parameters = [name for name, _ in opt_model.named_parameters() if "mm_projector" in name]
+                projector_parameters2 = [name for name, _ in opt_model.named_parameters() if "conv_linear" in name]
+                projector_parameters3 = [name for name, _ in opt_model.named_parameters() if "tfm_linear" in name]
+                projector_parameters4 = [name for name, _ in opt_model.named_parameters() if "CF_linear" in name]
+                projector_parameters5 = [name for name, _ in opt_model.named_parameters() if "PF_linear" in name]
+                projector_parameters6 = [name for name, _ in opt_model.named_parameters() if "conv_linear_f" in name]
+
+                projector_parameters7 = [name for name, _ in opt_model.named_parameters() if "query_projector" in name]
+                projector_parameters8 = [name for name, _ in opt_model.named_parameters() if "key_projector" in name]
+                projector_parameters9 = [name for name, _ in opt_model.named_parameters() if "value_projector" in name]
+
+                projector_parameters10 = [name for name, _ in opt_model.named_parameters() if
+                                          "query_projector_small" in name]
+                projector_parameters11 = [name for name, _ in opt_model.named_parameters() if
+                                          "key_projector_small" in name]
+                projector_parameters12 = [name for name, _ in opt_model.named_parameters() if
+                                          "value_projector_small" in name]
+
+                projector_parameters13 = [name for name, _ in opt_model.named_parameters() if
+                                          "query_projector_mid" in name]
+                projector_parameters14 = [name for name, _ in opt_model.named_parameters() if
+                                          "key_projector_mid" in name]
+                projector_parameters15 = [name for name, _ in opt_model.named_parameters() if
+                                          "value_projector_mid" in name]
+
+                projector_parameters16 = [name for name, _ in opt_model.named_parameters() if
+                                          "query_projector_huge" in name]
+                projector_parameters17 = [name for name, _ in opt_model.named_parameters() if
+                                          "key_projector_huge" in name]
+                projector_parameters18 = [name for name, _ in opt_model.named_parameters() if
+                                          "value_projector_huge" in name]
+
+                projector_parameters = (projector_parameters + projector_parameters2 + projector_parameters3
+                                        + projector_parameters4 + projector_parameters5 + projector_parameters6
+                                        + projector_parameters7 + projector_parameters8 + projector_parameters9
+                                        + projector_parameters10 + projector_parameters11 + projector_parameters12
+                                        + projector_parameters13 + projector_parameters14 + projector_parameters15
+                                        + projector_parameters16 + projector_parameters17 + projector_parameters18)
+                conv2_parameters = [name for name, _ in opt_model.named_parameters() if "conv_2" in name]
+                conv4_parameters = [name for name, _ in opt_model.named_parameters() if "conv_4" in name]
+                conv6_parameters = [name for name, _ in opt_model.named_parameters() if "conv_6" in name]
+                conv8_parameters = [name for name, _ in opt_model.named_parameters() if "conv_8" in name]
+                conv10_parameters = [name for name, _ in opt_model.named_parameters() if "conv_10" in name]
+                conv12_parameters = [name for name, _ in opt_model.named_parameters() if "conv_12" in name]
+                conv14_parameters = [name for name, _ in opt_model.named_parameters() if "conv_14" in name]
+                conv16_parameters = [name for name, _ in opt_model.named_parameters() if "conv_16" in name]
+                conv18_parameters = [name for name, _ in opt_model.named_parameters() if "conv_18" in name]
+                conv20_parameters = [name for name, _ in opt_model.named_parameters() if "conv_20" in name]
+                conv22_parameters = [name for name, _ in opt_model.named_parameters() if "conv_22" in name]
+                conv24_parameters = [name for name, _ in opt_model.named_parameters() if "conv_24" in name]
+
+                conv8_p_parameters = [name for name, _ in opt_model.named_parameters() if "conv_8_p" in name]
+                conv16_p_parameters = [name for name, _ in opt_model.named_parameters() if "conv_16_p" in name]
+                conv24_p_parameters = [name for name, _ in opt_model.named_parameters() if "conv_24_p" in name]
+
+                convcm_parameters = [name for name, _ in opt_model.named_parameters() if "conv_CM" in name]
+
+                convsmall_parameters = [name for name, _ in opt_model.named_parameters() if "conv_small" in name]
+                convmid_parameters = [name for name, _ in opt_model.named_parameters() if "conv_mid" in name]
+                convhuge_parameters = [name for name, _ in opt_model.named_parameters() if "conv_huge" in name]
+
+                cmp_parameters = [name for name, _ in opt_model.named_parameters() if "CM_P" in name]
+                cml_parameters = [name for name, _ in opt_model.named_parameters() if "CM_L" in name]
+                conv_parameters = (conv8_p_parameters + conv16_p_parameters+ conv24_p_parameters + conv2_parameters + conv4_parameters + conv6_parameters+ conv8_parameters
+                                   + conv10_parameters+ conv12_parameters + conv14_parameters+ conv16_parameters
+                                   + conv18_parameters+ conv20_parameters + conv22_parameters+ conv24_parameters + cml_parameters + cmp_parameters + convcm_parameters
+                                   + convsmall_parameters + convmid_parameters + convhuge_parameters)
+
+                tfm4_parameters = [name for name, _ in opt_model.named_parameters() if "tfm_4" in name]
+                tfm8_parameters = [name for name, _ in opt_model.named_parameters() if "tfm_8" in name]
+                tfm12_parameters = [name for name, _ in opt_model.named_parameters() if "tfm_12" in name]
+                tfm16_parameters = [name for name, _ in opt_model.named_parameters() if "tfm_16" in name]
+                tfm20_parameters = [name for name, _ in opt_model.named_parameters() if "tfm_20" in name]
+                tfm24_parameters = [name for name, _ in opt_model.named_parameters() if "tfm_24" in name]
+                tfm_parameters = (tfm4_parameters + tfm8_parameters + tfm12_parameters + tfm16_parameters
+                                  + tfm20_parameters + tfm24_parameters)
                 optimizer_grouped_parameters = [
                     {
                         "params": [
-                            p for n, p in opt_model.named_parameters() if (n in decay_parameters and n not in projector_parameters and p.requires_grad)
+                            p for n, p in opt_model.named_parameters() if (n in decay_parameters
+                                                                           and n not in projector_parameters
+                                                                           and n not in conv_parameters
+
+                                                                           and n not in tfm_parameters and p.requires_grad)
                         ],
                         "weight_decay": self.args.weight_decay,
                     },
                     {
                         "params": [
-                            p for n, p in opt_model.named_parameters() if (n not in decay_parameters and n not in projector_parameters and p.requires_grad)
+                            p for n, p in opt_model.named_parameters() if (n not in decay_parameters
+                                                                           and n not in projector_parameters
+                                                                           and n not in conv_parameters
+
+                                                                           and n not in tfm_parameters and p.requires_grad)
                         ],
                         "weight_decay": 0.0,
                     },
+
                     {
                         "params": [
-                            p for n, p in opt_model.named_parameters() if (n in decay_parameters and n in projector_parameters and p.requires_grad)
+                            p for n, p in opt_model.named_parameters() if (n in decay_parameters
+                                                                           and n in projector_parameters and p.requires_grad)
+                        ],
+                        "weight_decay": self.args.weight_decay,
+                        "lr": self.args.mm_projector_lr,
+                    },
+
+                    {
+                        "params": [
+                            p for n, p in opt_model.named_parameters() if (n not in decay_parameters
+                                                                           and n in projector_parameters and p.requires_grad)
+                        ],
+                        "weight_decay": 0.0,
+                        "lr": self.args.mm_projector_lr,
+                    },
+
+                    {
+                        "params": [
+                            p for n, p in opt_model.named_parameters() if
+                            (n in decay_parameters and n in conv_parameters and p.requires_grad)
                         ],
                         "weight_decay": self.args.weight_decay,
                         "lr": self.args.mm_projector_lr,
                     },
                     {
                         "params": [
-                            p for n, p in opt_model.named_parameters() if (n not in decay_parameters and n in projector_parameters and p.requires_grad)
+                            p for n, p in opt_model.named_parameters() if
+                            (n not in decay_parameters and n in conv_parameters and p.requires_grad)
                         ],
                         "weight_decay": 0.0,
                         "lr": self.args.mm_projector_lr,
                     },
+
+                    {
+                        "params": [
+                            p for n, p in opt_model.named_parameters() if
+                            (n in decay_parameters and n in tfm_parameters and p.requires_grad)
+                        ],
+                        "weight_decay": self.args.weight_decay,
+                        "lr": self.args.mm_projector_lr,
+                    },
+                    {
+                        "params": [
+                            p for n, p in opt_model.named_parameters() if
+                            (n not in decay_parameters and n in tfm_parameters and p.requires_grad)
+                        ],
+                        "weight_decay": 0.0,
+                        "lr": self.args.mm_projector_lr,
+                    },
+
                 ]
             else:
                 optimizer_grouped_parameters = [
@@ -202,7 +327,8 @@ class LLaVATrainer(Trainer):
                     },
                     {
                         "params": [
-                            p for n, p in opt_model.named_parameters() if (n not in decay_parameters and p.requires_grad)
+                            p for n, p in opt_model.named_parameters() if
+                            (n not in decay_parameters and p.requires_grad)
                         ],
                         "weight_decay": 0.0,
                     },
@@ -220,10 +346,10 @@ class LLaVATrainer(Trainer):
                 for module in opt_model.modules():
                     if isinstance(module, nn.Embedding):
                         skipped += sum({p.data_ptr(): p.numel() for p in module.parameters()}.values())
-                        logger.info(f"skipped {module}: {skipped/2**20}M params")
+                        logger.info(f"skipped {module}: {skipped / 2 ** 20}M params")
                         manager.register_module_override(module, "weight", {"optim_bits": 32})
                         logger.debug(f"bitsandbytes: will optimize {module} in fp32")
-                logger.info(f"skipped: {skipped/2**20}M params")
+                logger.info(f"skipped: {skipped / 2 ** 20}M params")
 
         return self.optimizer
 
@@ -236,7 +362,7 @@ class LLaVATrainer(Trainer):
             output_dir = os.path.join(run_dir, checkpoint_folder)
 
             # Only save Adapter
-            keys_to_match = ['mm_projector', 'vision_resampler']
+            keys_to_match = ['mm_projector', 'vision_resampler', 'conv_CM', 'conv_4', 'CM_P', 'conv_linear']
             if getattr(self.args, "use_im_start_end", False):
                 keys_to_match.extend(['embed_tokens', 'embed_in'])
 
