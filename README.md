@@ -5,29 +5,8 @@ The implementation changes of LLaVA-SP are in llava_arch.py, clip_encoder.py, ll
 
 ## Install
 
-If you are not using Linux, do *NOT* proceed, see instructions for [macOS](https://github.com/haotian-liu/LLaVA/blob/main/docs/macOS.md) and [Windows](https://github.com/haotian-liu/LLaVA/blob/main/docs/Windows.md).
+Please see instructions for https://github.com/haotian-liu/LLaVA/
 
-1. Clone this repository and navigate to LLaVA folder
-```bash
-git clone https://github.com/haotian-liu/LLaVA.git
-cd LLaVA
-```
-
-2. Install Package
-```Shell
-conda create -n llava python=3.10 -y
-conda activate llava
-pip install --upgrade pip  # enable PEP 660 support
-pip install -e .
-```
-
-3. Install additional packages for training cases
-```
-pip install -e ".[train]"
-pip install flash-attn --no-build-isolation
-```
-
-```
 
 
 ## LLaVA-SP Weights
