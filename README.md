@@ -19,9 +19,6 @@ python llava/eval/run_llava.py
 --model_base /path/vicuna-1.5-7b
 ```
 
-    parser.add_argument("--model-path", type=str, default="facebook/opt-350m")
-    parser.add_argument("--model-base", type=str, default=None)
-
 ## Citation
 
 If you find LLaVA-SP useful for your research and applications, please cite using this BibTeX:
