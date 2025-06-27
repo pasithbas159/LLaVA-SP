@@ -10,7 +10,7 @@ Please see instructions for https://github.com/haotian-liu/LLaVA/
 
 
 ## LLaVA-SP Weights
-Please check out our (:to do) for all public LLaVA-SP checkpoints.
+Please check out https://huggingface.co/Levideus/models for all public LLaVA-SP checkpoints.
 
 
 ## Citation
