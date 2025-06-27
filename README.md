@@ -10,7 +10,7 @@ Please see instructions for https://github.com/haotian-liu/LLaVA/
 
 
 ## LLaVA-SP Weights
-Please check out our [Model Zoo](https://github.com/haotian-liu/LLaVA/blob/main/docs/MODEL_ZOO.md)(:to do) for all public LLaVA checkpoints, and the instructions of how to use the weights.
+Please check out our (:to do) for all public LLaVA-SP checkpoints.
 
 
 ## Citation
