@@ -1,4 +1,6 @@
+## LLaVA-SP
 The official pytorch implement of "LLaVA-SP: Enhancing Visual Representation with Visual Spatial Tokens for MLLMs".
+
 The implementation changes of LLaVA-SP are in llava/model/llava_arch.py and llava/model/multimodal_encoder/clip_encoder.py.
 
 
@@ -26,14 +28,6 @@ pip install -e ".[train]"
 pip install flash-attn --no-build-isolation
 ```
 
-### Upgrade to latest code base
-
-```Shell
-git pull
-pip install -e .
-
-# if you see some import errors when you upgrade, please try running the command below (without #)
-# pip install flash-attn --no-build-isolation --no-cache-dir
 ```
 
 
