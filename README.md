@@ -1,7 +1,7 @@
 ## LLaVA-SP
 The official pytorch implement of "LLaVA-SP: Enhancing Visual Representation with Visual Spatial Tokens for MLLMs".
 
-The implementation changes of LLaVA-SP are in llava/model/llava_arch.py and llava/model/multimodal_encoder/clip_encoder.py.
+The implementation changes of LLaVA-SP are in llava_arch.py and clip_encoder.py.
 
 
 ## Install
