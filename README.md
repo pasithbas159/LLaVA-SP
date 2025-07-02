@@ -26,7 +26,7 @@ If you find LLaVA-SP useful for your research and applications, please cite usin
 @misc{lou2025llavasp,
     title={LLaVA-SP: Enhancing Visual Representation with Visual Spatial Tokens for MLLMs},
     author={Lou, Haoran Lou and Fan, Chunxiao and Liu, Ziyan Liu and Wu, Yuexin Wu and Wang, Xinxiang},
-    arXiv:2507.00505,
+    publisher={arXiv:2507.00505},
     year={2025}
 }
 ```
