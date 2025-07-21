@@ -19,6 +19,10 @@ python llava/eval/run_llava.py
 --model_base /path/vicuna-1.5-7b
 ```
 
+```
+python llava/eval/run_llava.py --model-path Levideus/llava-sp-pooling-lora --model-base lmsys/vicuna-7b-v1.5 --image-file "https://llava-vl.github.io/static/images/view.jpg" --query "What are the things I should be cautious about when I visit here?"
+```
+
 ## Citation
 
 If you find LLaVA-SP useful for your research and applications, please cite using this BibTeX:
@@ -30,3 +34,4 @@ If you find LLaVA-SP useful for your research and applications, please cite usin
     year={2025}
 }
 ```
+https://stackoverflow.com/questions/79273647/cannot-import-name-encoderdecodercache-from-transformers

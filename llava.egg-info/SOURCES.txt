@@ -41,6 +41,7 @@ llava/model/language_model/llava_mistral.py
 llava/model/language_model/llava_mpt.py
 llava/model/multimodal_encoder/builder.py
 llava/model/multimodal_encoder/clip_encoder.py
+llava/model/multimodal_encoder/siglip_encoder.py
 llava/model/multimodal_projector/builder.py
 llava/model/multimodal_projector/qformer.py
 llava/serve/__init__.py
